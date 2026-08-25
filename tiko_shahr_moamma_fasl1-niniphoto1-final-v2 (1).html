@@ -1,0 +1,97 @@
+<!doctype html><html lang="fa" dir="rtl"><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>تیکو و شهر معماها</title>
+<style>
+body{margin:0;font-family:Tahoma;background:linear-gradient(135deg,#b8edff,#fff0b8,#ffd9ea);color:#26344b}.game{max-width:900px;margin:20px auto;background:#fff;border-radius:28px;overflow:hidden;box-shadow:0 15px 50px #5555}.head{background:linear-gradient(90deg,#55d8ff,#9275ff);color:#fff;padding:16px;display:flex;justify-content:space-between;font-weight:bold}.screen{display:none;padding:25px;min-height:600px}.on{display:block}.start,.result{text-align:center}.hero{font-size:100px}h1{color:#5c48c7;font-size:40px}.id{color:#e34e8d;font-weight:bold;margin:15px}.btn,.opt{border:0;border-radius:17px;padding:15px;font-size:19px;font-weight:bold;cursor:pointer}.btn{background:#ff708f;color:white;box-shadow:0 5px #d34f70}.stage{text-align:center;color:#5c48c7;font-size:28px;font-weight:bold}.tico{text-align:center;font-size:55px}.q{background:#f7f8ff;border-radius:22px;padding:20px;text-align:center;font-size:23px;font-weight:bold;margin:15px;direction:rtl}.visual{
+display:flex;
+align-items:center;
+justify-content:center;
+gap:clamp(2px,1vw,10px);
+width:100%;
+max-width:100%;
+margin:12px 0;
+padding:8px 4px;
+box-sizing:border-box;
+font-size:clamp(18px,7vw,45px);
+line-height:1.25;
+direction:ltr!important;
+unicode-bidi:isolate;
+white-space:nowrap;
+overflow:hidden
+}
+.visual bdi{display:inline-block;direction:ltr;unicode-bidi:isolate;white-space:nowrap}
+.pattern{direction:ltr!important;unicode-bidi:isolate;white-space:nowrap}.opts{display:grid;grid-template-columns:1fr 1fr;gap:12px}.opt{background:#f5f6ff;border:3px solid #dfe4ff;box-shadow:0 4px #d5d9ef}.correct{background:#d7ffd9!important;border-color:#55c46b!important}.wrong{background:#ffdede!important;border-color:#ee7070!important}.feed{text-align:center;height:40px;font-weight:bold;font-size:19px}.bar{height:10px;background:#e7eaf3;border-radius:20px}.fill{height:100%;background:#6d7cff;width:0}.medal{font-size:100px}@media(max-width:600px){.opts{grid-template-columns:1fr}h1{font-size:30px}}
+.op{display:inline-block;direction:ltr;white-space:nowrap;margin:0 .08em}</style>
+<div class="game"><div class="head"><span>🧩 تیکو و شهر معماها</span><span>⭐ <b id="score">0</b></span></div>
+<section id="start" class="screen on start"><div class="id">@niniphoto1</div><div class="hero">🧩⏰</div><h1>تیکو و شهر معماها</h1><p>بازی آموزشی فصل اول ریاضی پایه اول<br>راهبردهای حل مسئله، شمارش، دسته‌بندی و الگوها</p><button class="btn" onclick="start()">🚀 شروع مأموریت</button><p>🔊 صدای دستگاه را روشن کنید.</p></section>
+<section id="play" class="screen"><div class="bar"><div id="fill" class="fill"></div></div><div class="tico">⏰</div><div id="stage" class="stage"></div><div id="content"></div><div id="feed" class="feed"></div></section>
+<section id="result" class="screen result"><div id="medal" class="medal">🏆</div><h1>مأموریت تمام شد!</h1><h2>امتیاز: <span id="final">0</span></h2><p id="review"></p><button class="btn" onclick="location.reload()">🔄 دوباره بازی کن</button></section></div>
+<script>
+const sets=[
+["شمارش و حل مسئله",[
+["تیکو ۳ سیب دارد و ۲ سیب دیگر پیدا می‌کند. چند سیب دارد؟",["۴","۵","۶","۷"],1,"🍎🍎🍎 <span class='op'>➕</span> 🍎🍎"],
+["در باغ ۵ گل قرمز و ۱ گل زرد است. چند گل داریم؟",["۵","۶","۷","۴"],1,"🌹🌹🌹🌹🌹 🌼"],
+["۴ پرنده هستند و ۲ پرنده دیگر می‌آیند. چند پرنده می‌شوند؟",["۵","۶","۷","۴"],1,"🐦🐦🐦🐦 <span class='op'>➕</span> 🐦🐦"],
+["تیکو ۶ بادکنک دارد و ۱ بادکنک می‌ترکد. چند بادکنک می‌ماند؟",["۴","۵","۶","۷"],1,"🎈🎈🎈🎈🎈🎈 <span class='op'>💥</span>"],
+["روی میز ۲ مداد و ۳ پاک‌کن است. چند وسیله است؟",["۴","۵","۶","۳"],1,"✏️✏️ 🧽🧽🧽"],
+["در سبد ۷ پرتقال است. ۲ پرتقال برداشته می‌شود. چند می‌ماند؟",["۴","۵","۶","۷"],1,"🍊🍊🍊🍊🍊🍊🍊"],
+["۴ ماهی هستند و ۳ ماهی اضافه می‌شوند. چند ماهی داریم؟",["۶","۷","۸","۵"],1,"🐟🐟🐟🐟 ➕ 🐟🐟🐟"],
+["۵ کودک در صف هستند. ۱ کودک خارج می‌شود. چند می‌ماند؟",["۳","۴","۵","۶"],1,"🧒🧒🧒🧒🧒"]]],
+["دسته‌بندی",[
+["کدام گزینه فقط حیوان‌ها را نشان می‌دهد؟",["🐶 🐱 🐰","🍎 🐶 🚗","🌸 🐟 ✏️","🚲 🍌 🐱"],0,""],
+["کدام گزینه فقط خوراکی‌هاست؟",["🍎 🍌 🥕","🐱 🍎 🚗","✏️ 📚 🍞","🌸 🍊 🐶"],0,""],
+["کدام گزینه فقط وسایل مدرسه است؟",["✏️ 📚 🎒","🍎 ✏️ 🐶","🚗 📚 🌸","🎒 🍌 🐟"],0,""],
+["کدام مورد با بقیه هم‌گروه نیست؟",["🐟","🐠","🐬","🍎"],3,""],
+["کدام گزینه فقط وسایل نقلیه را دارد؟",["🚗 🚌 🚲","🍎 🚗 🐱","✏️ 🚲 🌸","🚌 🍌 🚗"],0,""],
+["کدام گزینه فقط میوه است؟",["🍎 🍐 🍊","🥕 🍎 🐶","🍌 🚗 🍓","🍊 🐟 🍐"],0,""],
+["کدام گزینه فقط شکل هندسی دارد؟",["🔺 🟦 🔵","🍎 🔺 🐶","🟦 🚗 🌸","🔵 🍌 🐟"],0,""]]],
+["الگو",[
+["الگو را کامل کن: 🔴 🔵 🔴 🔵 ؟",["🔴","🔵","🟢","🟡"],0,"🔴 🔵 🔴 🔵 ؟"],
+["الگو را کامل کن: ⭐ 🌙 ⭐ 🌙 ؟",["🌙","⭐","☀️","❤️"],1,"⭐ 🌙 ⭐ 🌙 ؟"],
+["الگو را کامل کن: 🍎 🍎 🍌 🍎 🍎 🍌 ؟",["🍌","🍎","🍊","🍐"],1,"🍎 🍎 🍌 🍎 🍎 🍌 ؟"],
+["الگو را کامل کن: 🟩 🟨 🟩 🟨 ؟",["🟨","🟩","🟥","🟦"],1,"🟩 🟨 🟩 🟨 ؟"],
+["الگو را کامل کن: 🐶 🐱 🐶 🐱 ؟",["🐱","🐶","🐰","🐭"],1,"🐶 🐱 🐶 🐱 ؟"],
+["الگو را کامل کن: ۱، ۲، ۱، ۲، ؟",["۱","۲","۳","۴"],0,"۱، ۲، ۱، ۲، ؟"],
+["الگو را کامل کن: ۲، ۴، ۲، ۴، ؟",["۲","۳","۴","۵"],0,"۲، ۴، ۲، ۴، ؟"],
+["الگو را کامل کن: 🌸 🍃 🌸 🍃 ؟",["🍃","🌸","🌻","🌳"],1,"🌸 🍃 🌸 🍃 ؟"]]],
+["مقایسه",[
+["کدام گروه بیشتر است؟",["🍎🍎","🍎🍎🍎🍎","🍎🍎🍎","🍎"],1,""],
+["کدام گروه کمتر است؟",["🐟🐟🐟","🐟","🐟🐟","🐟🐟🐟🐟"],1,""],
+["کدام گروه تعداد مساوی دارد؟",["⭐⭐⭐ / 🌙🌙","⭐⭐⭐ / 🌙🌙🌙","⭐⭐ / 🌙🌙🌙","⭐ / 🌙🌙"],1,""],
+["کدام عدد بزرگ‌تر است؟",["۲","۵","۳","۱"],1,""],
+["کدام عدد کوچک‌تر است؟",["۶","۴","۸","۹"],1,""],
+["تیکو ۳ مداد و سارا ۵ مداد دارد. چه کسی بیشتر دارد؟",["تیکو","سارا","هر دو","هیچ‌کدام"],1,"✏️✏️✏️ / ✏️✏️✏️✏️✏️"],
+["درخت اول ۶ سیب و درخت دوم ۴ سیب دارد. کدام بیشتر دارد؟",["اول","دوم","هر دو","هیچ‌کدام"],0,"🌳🍎🍎🍎🍎🍎🍎 / 🌳🍎🍎🍎🍎"]]],
+["حل مسئله",[
+["تیکو ۲ شکلات دارد و ۳ شکلات می‌گیرد. چند شکلات دارد؟",["۴","۵","۶","۳"],1,"🍫🍫 ➕ 🍫🍫🍫"],
+["۶ توپ داریم. ۲ توپ زیر میز می‌رود. چند توپ بیرون می‌ماند؟",["۳","۴","۵","۶"],1,"⚽⚽⚽⚽⚽⚽"],
+["۳ گنجشک روی دیوار و ۴ گنجشک روی زمین هستند. چند گنجشک داریم؟",["۶","۷","۸","۵"],1,"🐦🐦🐦 / 🐦🐦🐦🐦"],
+["تیکو ۷ ستاره دارد و ۳ تا را هدیه می‌دهد. چند می‌ماند؟",["۳","۴","۵","۶"],1,"⭐⭐⭐⭐⭐⭐⭐"],
+["۲ ماشین قرمز و ۲ ماشین آبی هستند. چند ماشین هستند؟",["۳","۴","۵","۶"],1,"🚗🚗 <span class='op'>➕</span> 🚙🚙"],
+["۵ خرگوش بودند. ۱ خرگوش رفت. چند خرگوش ماند؟",["۳","۴","۵","۶"],1,"🐰🐰🐰🐰🐰"],
+["۴ گل داریم و ۲ گل دیگر اضافه می‌کنیم. چند گل می‌شود؟",["۵","۶","۷","۸"],1,"🌷🌷🌷🌷 ➕ 🌷🌷"],
+["۸ پرنده هستند. ۳ پرنده پرواز می‌کنند. چند می‌ماند؟",["۴","۵","۶","۷"],1,"🐦🐦🐦🐦🐦🐦🐦🐦"]]],
+["راهبرد حل مسئله",[
+["برای شمردن ۵ توپ، کدام کار کمک‌کننده است؟",["یکی‌یکی شمردن","چشم‌ها را بستن","پنهان کردن","شمردن نکردن"],0,"⚽⚽⚽⚽⚽"],
+["برای پیدا کردن وسایل هم‌شکل، چه کاری انجام می‌دهیم؟",["دسته‌بندی","پنهان کردن","رنگ کردن همه","پاک کردن"],0,""],
+["برای حل یک مسئله، اول چه کاری بهتر است؟",["صورت مسئله را با دقت ببینیم","فوراً حدس بزنیم","صفحه را ببندیم","جواب را پاک کنیم"],0,""],
+["برای فهمیدن تعداد مدادها چه کاری مناسب است؟",["یکی‌یکی بشماریم","قایم کنیم","پرت کنیم","پاک کنیم"],0,"✏️✏️✏️✏️"],
+["برای پیدا کردن شکل‌های هم‌شکل چه می‌کنیم؟",["دسته‌بندی می‌کنیم","مخلوط می‌کنیم","چشم‌ها را می‌بندیم","حذف می‌کنیم"],0,""],
+["اگر یک الگو را نمی‌فهمی، چه کار می‌کنی؟",["به ترتیب شکل‌ها نگاه می‌کنیم","تصادفی جواب می‌دهیم","سؤال را رد می‌کنیم","همه را انتخاب می‌کنیم"],0,""]]],
+["چالش تیکو",[
+["سه بشقاب داریم و در هر بشقاب ۲ سیب است. چند سیب داریم؟",["۴","۵","۶","۷"],2,"🍎🍎 | 🍎🍎 | 🍎🍎"],
+["۴ کودک هر کدام یک بادکنک دارند. چند بادکنک است؟",["۳","۴","۵","۶"],1,"🧒🎈 🧒🎈 🧒🎈 🧒🎈"],
+["الگو: ۱، ۱، ۲، ۱، ۱، ۲، ؟",["۱","۲","۳","۴"],0,"۱، ۱، ۲، ۱، ۱، ۲، ؟"],
+["۴ ستاره و ۴ قلب داریم. کدام گروه بیشتر است؟",["ستاره","قلب","برابرند","هیچ‌کدام"],2,"⭐⭐⭐⭐ / ❤️❤️❤️❤️"],
+["تیکو ۳ سیب داشت، ۲ تا خورد و ۴ تا گرفت. حالا چند دارد؟",["۴","۵","۶","۷"],1,"🍎🍎🍎 <span class='op'>➖</span> 🍎🍎 <span class='op'>➕</span> 🍎🍎🍎🍎"],
+["۳ توپ قرمز، ۲ توپ آبی و ۱ توپ سبز است. چند توپ داریم؟",["۵","۶","۷","۴"],1,"🔴🔴🔴 🔵🔵 🟢"]]]
+];
+let all=[];sets.forEach(s=>s[1].forEach(q=>all.push([s[0],...q])));
+let qs=[],idx=0,score=0,locked=false,ctx=null;
+function shuffle(a){for(let i=a.length-1;i>0;i--){let j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]]}return a}
+function start(){qs=[...all];idx=0;score=0;document.getElementById("score").textContent=0;document.getElementById("start").classList.remove("on");document.getElementById("play").classList.add("on");try{ctx=new AudioContext()}catch(e){};render()}
+function beep(f,d=.12){if(!ctx)return;let o=ctx.createOscillator(),g=ctx.createGain();o.frequency.value=f;o.connect(g);g.connect(ctx.destination);g.gain.value=.05;o.start();o.stop(ctx.currentTime+d)}
+function sound(ok){beep(ok?600:220,.15);if(ok)setTimeout(()=>beep(800,.12),100)}
+function speak(t){if(!speechSynthesis)return;let u=new SpeechSynthesisUtterance(t);u.lang="fa-IR";u.rate=.9;speechSynthesis.speak(u)}
+function render(){locked=false;let q=qs[idx];document.getElementById("stage").textContent="مرحله: "+q[0];document.getElementById("fill").style.width=(idx/qs.length*100)+"%";document.getElementById("feed").textContent="";let a=q[2].map((x,j)=>[x,j]);shuffle(a);let h='<div class="q">❓ '+q[1]+'</div>';if(q[4])h+='<div class="visual pattern" dir="ltr">'+q[4]+'</div>';h+='<div class="opts">'+a.map(x=>'<button class="opt" data-c="'+(x[1]===q[3])+'" onclick="ans('+x[1]+',this)">'+x[0]+'</button>').join("")+'</div>';document.getElementById("content").innerHTML=h;speak(q[1])}
+function ans(c,b){if(locked)return;locked=true;let q=qs[idx],buttons=[...document.querySelectorAll(".opt")];if(c===q[3]){score+=10;b.classList.add("correct");document.getElementById("feed").textContent="🎉 آفرین! جواب درست است.";sound(true);speak("آفرین! جواب درست است.")}else{b.classList.add("wrong");let x=buttons.find(z=>z.dataset.c==="true");if(x)x.classList.add("correct");document.getElementById("feed").textContent="🌱 اشکالی نداره! دوباره تلاش کن.";sound(false);speak("اشکالی نداره! دوباره تلاش کن.")}document.getElementById("score").textContent=score;setTimeout(()=>{idx++;idx<qs.length?render():finish()},800)}
+function finish(){document.getElementById("fill").style.width="100%";document.getElementById("final").textContent=score;let p=score/(qs.length*10);document.getElementById("medal").textContent=p>=.85?"🏆":p>=.65?"🥈":"🥉";document.getElementById("review").innerHTML="📚 "+qs.length+" سؤال متنوع<br>⭐ هر پاسخ درست: ۱۰ امتیاز<br>🧠 شمارش، دسته‌بندی، الگو، مقایسه و حل مسئله<br><br>@niniphoto1";document.getElementById("play").classList.remove("on");document.getElementById("result").classList.add("on");sound(true);speak("تبریک می‌گم! مأموریت تمام شد.")}
+</script></html>
